@@ -20,18 +20,16 @@ st.markdown("""
 
 st.sidebar.header("⚙️ Parámetros de consulta")
 
-# Checkbox para analizar todos los años
 analizar_todos_anos = st.sidebar.checkbox(
     "📅 Analizar todos los años (2015-2025)", 
     value=False,
     help="Selecciona esta opción para analizar datos de todos los años disponibles"
 )
 
-# Selector de año individual (se deshabilita si se marca el checkbox)
 if analizar_todos_anos:
-    years = list(range(2015, 2026))  # 2015 a 2025
+    years = list(range(2015, 2026))  
     st.sidebar.info(f"✅ Analizando {len(years)} años: 2015-2025")
-    year = None  # No se usa un año específico
+    year = None  
 else:
     year = st.sidebar.selectbox("Selecciona el año", [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015])
     years = [year]
@@ -85,7 +83,7 @@ if st.sidebar.button("🔍 Cargar datos"):
     
     all_data = []
     
-    # Iteración por cada año
+   
     for year_idx, current_year in enumerate(years):
         st.subheader(f"📥 Descargando datos del año {current_year}...")
         
@@ -157,7 +155,7 @@ if st.sidebar.button("🔍 Cargar datos"):
     else:
         st.success(f"✅ Datos cargados correctamente - {len(df)} registros obtenidos")
     
-    # Obtención de montos
+    
     st.info("🔍 Obteniendo montos de contratos... esto puede tardar unos minutos")
     
     montos_data = []
@@ -270,7 +268,7 @@ if st.sidebar.button("🔍 Cargar datos"):
 
     st.subheader("📊 Visualizaciones")
 
-    # Visualización específica para análisis multi-año
+    
     if analizar_todos_anos and "year" in df.columns:
         year_stats = df.groupby("year").agg({
             "ocid": "count",
@@ -368,7 +366,7 @@ if st.sidebar.button("🔍 Cargar datos"):
         st.plotly_chart(fig6, use_container_width=True)
         st.caption("👉 Proveedores con mayor cantidad de contratos adjudicados.")
 
-    # Gráfica comparativa de tipos de contratación por año
+    
     if "year" in df.columns and "tipo_contratacion" in df.columns:
         tipo_year = df.groupby(["year", "tipo_contratacion"]).size().reset_index(name="cantidad")
         
@@ -380,7 +378,7 @@ if st.sidebar.button("🔍 Cargar datos"):
         st.plotly_chart(fig_comp, use_container_width=True)
         st.caption("👉 Evolución temporal de cada tipo de contratación a lo largo de los años analizados.")
         
-        # Versión alternativa con montos (si están disponibles)
+       
         if df["monto_total"].sum() > 0:
             tipo_year_monto = df.groupby(["year", "tipo_contratacion"])["monto_total"].sum().reset_index()
             tipo_year_monto = tipo_year_monto[tipo_year_monto["monto_total"] > 0]
